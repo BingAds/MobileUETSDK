@@ -6,7 +6,7 @@ Integrate the MobileUETSDK to your Android project.
 
   1-1. Make an directory named 'libs' in /YourProjectName/app.Put the uetsdk.jar in that directory.
   
-       ![image](https://user-images.githubusercontent.com/91300612/135041522-096611c0-9bb4-4bb9-aeac-e61130ffc114.png)
+       ![image](https://github.com/BingAds/MobileUETSDK/blob/main/libs.png)
        
   1-2. Add dependency of uetsdk to your gradle file in /YourProjectName/app/build.gradle
   
