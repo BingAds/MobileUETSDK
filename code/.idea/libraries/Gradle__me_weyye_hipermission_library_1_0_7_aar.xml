@@ -1,0 +1,21 @@
+<component name="libraryTable">
+  <library name="Gradle: me.weyye.hipermission:library:1.0.7@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/272a8c5d5a7b4d340656bc4ca48faf38/jetified-library-1.0.7/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/272a8c5d5a7b4d340656bc4ca48faf38/jetified-library-1.0.7/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/272a8c5d5a7b4d340656bc4ca48faf38/jetified-library-1.0.7/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/da19435411e5f1d1569b4367841985c9/jetified-library-1.0.7/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/da19435411e5f1d1569b4367841985c9/jetified-library-1.0.7/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/da19435411e5f1d1569b4367841985c9/jetified-library-1.0.7/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/4eaa53fdbab02c5b02d1dd7b34156751/jetified-library-1.0.7/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/4eaa53fdbab02c5b02d1dd7b34156751/jetified-library-1.0.7/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/4eaa53fdbab02c5b02d1dd7b34156751/jetified-library-1.0.7/res" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/me.weyye.hipermission/library/1.0.7/ff2584b635103065c0056613b1e7e6db4c265f9b/library-1.0.7-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/me.weyye.hipermission/library/1.0.7/d3801f14a47b25b8bb27df34219560a627df33d5/library-1.0.7-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
