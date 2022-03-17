@@ -12,13 +12,11 @@ pool:
 steps:
 - task: CredScan@3
   inputs:
-    outputFormat: 'csv'
     verboseOutput: true
 
 - task: SdtReport@2
   inputs:
     GdnExportTsvFile: true
-    GdnExportSarifFile: false
     GdnExportHtmlFile: true
     GdnExportAllTools: true
 
