@@ -31,4 +31,5 @@ steps:
   inputs:
     scanType: 'Register'
     verbosity: 'Verbose'
-    alertWarningLevel: 'High'
+    alertWarningLevel: 'High' 
+
