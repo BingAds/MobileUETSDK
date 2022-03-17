@@ -14,14 +14,6 @@ steps:
   inputs:
     outputFormat: 'csv'
     verboseOutput: true
-- task: Semmle@1
-  inputs:
-    sourceCodeDirectory: '$(Build.SourcesDirectory)'
-    language: 'java'
-    querySuite: 'Recommended'
-    timeout: '1800'
-    ram: '16384'
-    addProjectDirToScanningExclusionList: true
 - task: ComponentGovernanceComponentDetection@0
   inputs:
     scanType: 'Register'
