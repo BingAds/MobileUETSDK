@@ -14,6 +14,11 @@ steps:
   inputs:
     outputFormat: 'csv'
     verboseOutput: true
+- task: ESLint@1
+  inputs:
+    Configuration: 'required'
+    TargetType: 'eslint'
+    ErrorLevel: 'warn'
 - task: Semmle@1
   inputs:
     sourceCodeDirectory: '$(Build.SourcesDirectory)'
