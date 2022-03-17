@@ -14,9 +14,16 @@ steps:
   inputs:
     outputFormat: 'csv'
     verboseOutput: true
+
 - task: ComponentGovernanceComponentDetection@0
   inputs:
     scanType: 'Register'
     verbosity: 'Verbose'
     alertWarningLevel: 'High' 
 
+- task: SdtReport@2
+  inputs:
+    GdnExportTsvFile: true
+    GdnExportSarifFile: false
+    GdnExportHtmlFile: true
+    GdnExportAllTools: true
