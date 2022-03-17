@@ -14,26 +14,14 @@ steps:
     TargetType: 'eslint' 
     ErrorLevel: 'warn' 
  
-- task: Semmle@0 
-  env:  
-    SYSTEM_ACCESSTOKEN: $(System.AccessToken) 
-  inputs: 
-    sourceCodeDirectory: '$(Build.SourcesDirectory)' 
-    language: 'tsandjs' 
-    includeNodeModules: true 
-    querySuite: 'Recommended' 
-    timeout: '1800' 
-    ram: '16384' 
-addProjectDirToScanningExclusionList: true 
- 
-- task: Semmle@1 
-  inputs: 
-    sourceCodeDirectory: '$(Build.SourcesDirectory)' 
-    language: 'python' 
-    querySuite: 'Recommended' 
-    timeout: '1800' 
-    ram: '16384' 
-    addProjectDirToScanningExclusionList: true 
+- task: Semmle@1
+  inputs:
+    sourceCodeDirectory: '$(Build.SourcesDirectory)'
+    language: 'java'
+    querySuite: 'Recommended'
+    timeout: '1800'
+    ram: '16384'
+    addProjectDirToScanningExclusionList: true
  
 # Both versions of Semmle (0 and 1) aren't required 
 # Either one is fine. The latest version will show up as 
