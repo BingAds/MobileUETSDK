@@ -27,4 +27,4 @@ steps:
     addProjectDirToScanningExclusionList: true
 - task: CredScan@3
   inputs:
-      toolMajorVersion: 'V2' 
+      toolMajorVersion: 'V3' 
