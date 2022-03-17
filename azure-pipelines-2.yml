@@ -14,12 +14,6 @@ steps:
   inputs:
     verboseOutput: true
 
-- task: SdtReport@2
-  inputs:
-    GdnExportTsvFile: true
-    GdnExportHtmlFile: true
-    GdnExportAllTools: true
-
 - task: ComponentGovernanceComponentDetection@0
   inputs:
     scanType: 'Register'
