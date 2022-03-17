@@ -25,5 +25,3 @@ steps:
     timeout: '1800'
     ram: '16384'
     addProjectDirToScanningExclusionList: true
-- task: CredScan@3
-  inputs:
