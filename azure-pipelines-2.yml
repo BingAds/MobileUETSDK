@@ -13,23 +13,15 @@ variables:
   Codeql.Enabled: true
 
 steps:
+- task: CodeQL3000Init@0
 - task: CredScan@3
   inputs:
     verboseOutput: true
-
-- task: Semmle@1
-  env:
-    SYSTEM_ACCESSTOKEN: '$(System.AccessToken)'
-  inputs:
-    sourceCodeDirectory: '$(Build.SourcesDirectory)'
-    language: 'java'
-    querySuite: 'Recommended'
-    timeout: '1800'
-    ram: '16384'
-    addProjectDirToScanningExclusionList: true    
 
 - task: ComponentGovernanceComponentDetection@0
   inputs:
     scanType: 'Register'
     verbosity: 'Verbose'
     alertWarningLevel: 'High'
+
+- task: CodeQL3000Finalize@0
