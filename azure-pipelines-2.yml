@@ -16,7 +16,7 @@ steps:
 
 - task: Semmle@0
   env：
-    System_AccessToken：'$(System.AccessToken)'
+    'System_AccessToken'：'$(System.AccessToken)'
   inputs:
     sourceCodeDirectory: '$(Build.SourcesDirectory)'
     language: 'java'
