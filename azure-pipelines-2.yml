@@ -21,7 +21,7 @@ steps:
     alertWarningLevel: 'High' 
 - task: Semmle@1
   env:
-    
+    SYSTEM_ACCESSTOKEN: '$(System.AccessToken) 
   inputs:
     sourceCodeDirectory: '$(Build.SourcesDirectory)'
     language: 'java'
