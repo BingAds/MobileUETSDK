@@ -19,7 +19,7 @@ steps:
     scanType: 'Register'
     verbosity: 'Verbose'
     alertWarningLevel: 'High' 
-- task: Semmle@1
+- task: Semmle@0
   inputs:
     sourceCodeDirectory: '$(Build.SourcesDirectory)'
     language: 'java'
