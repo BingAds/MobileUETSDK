@@ -14,7 +14,7 @@ steps:
   inputs:
     verboseOutput: true
 
-- task: Semmle@1
+- task: Semmle@0
   env：
     System_AccessToken：'$(System.AccessToken)'
   inputs:
