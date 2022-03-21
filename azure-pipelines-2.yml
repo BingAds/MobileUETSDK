@@ -9,6 +9,9 @@ trigger:
 pool:
   vmImage:  windows-latest 
 
+variables:
+  Codeql.Enabled: true
+
 steps:
 - task: CredScan@3
   inputs:
