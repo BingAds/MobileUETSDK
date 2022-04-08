@@ -177,14 +177,8 @@ public class DeviceUtil {
             return uid;
         }
         uid = tm.getDeviceId();
-        System.out.println("DEVICEID: " + uid);
-        System.out.println("IMEI: " + tm.getImei());
-        System.out.println("MEID: " + tm.getMeid());
-        System.out.println("NETWORKOperator: " + tm.getNetworkOperatorName());
-        System.out.println("CALLSTATS: " + tm.getCallState());
 
-        String ANDROID_ID = Settings.System.getString(context.getContentResolver(), Settings.System.ANDROID_ID);
-        System.out.println("ANDROID_ID: " + ANDROID_ID);
+        //String ANDROID_ID = Settings.System.getString(context.getContentResolver(), Settings.System.ANDROID_ID);
 
         uid = StringUtil.md5(uid);
         return uid;

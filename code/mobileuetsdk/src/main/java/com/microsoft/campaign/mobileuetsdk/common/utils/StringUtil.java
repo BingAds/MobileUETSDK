@@ -10,6 +10,7 @@ import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -28,11 +29,11 @@ public class StringUtil {
     }
 
     public static boolean isEmpty(String value){
-        boolean rst = false;
-        if (null == value || "".equals(rst)){
-            rst = true;
+        if (value == null){
+            return true;
         }
-        return rst;
+
+        return value.length() <= 0;
     }
 
     public static String md5(String string) {
@@ -42,17 +43,17 @@ public class StringUtil {
         MessageDigest md5 = null;
         try {
             md5 = MessageDigest.getInstance("MD5");
-            byte[] bytes = md5.digest(string.getBytes());
-            String result = "";
+            byte[] bytes = md5.digest(string.getBytes("UTF-8"));
+            StringBuilder result = new StringBuilder();
             for (byte b : bytes) {
                 String temp = Integer.toHexString(b & 0xff);
                 if (temp.length() == 1) {
                     temp = "0" + temp;
                 }
-                result += temp;
+                result.append(temp);
             }
-            return result.toUpperCase();
-        } catch (NoSuchAlgorithmException e) {
+            return result.toString().toUpperCase();
+        } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         return "";
@@ -63,23 +64,26 @@ public class StringUtil {
         int mapsize = map.size();
         if (mapsize > 0) {
             int index = 0;
-            for (String key : map.keySet()) {
+            Iterator<Map.Entry<String,String>> it = map.entrySet().iterator();
+            while(it.hasNext())
+            {
+                Map.Entry<String,String> entry = it.next();
+                String key = entry.getKey();
+                String value = entry.getValue();
                 index ++;
                 sb.append(key + "=");
+
                 if (index == mapsize){
-                    String value = map.get(key);
                     try {
                         value = URLEncoder.encode(value, "UTF-8");
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
                     sb.append(value);
-
                 }else{
-                    if (isEmpty(map.get(key))) {
+                    if (isEmpty(value)) {
                         sb.append("&");
                     } else {
-                        String value = map.get(key);
                         try {
                             value = URLEncoder.encode(value, "UTF-8");
                         } catch (UnsupportedEncodingException e) {
@@ -88,7 +92,6 @@ public class StringUtil {
                         sb.append(value + "&");
                     }
                 }
-
             }
         }
         return sb.toString();
@@ -100,7 +103,12 @@ public class StringUtil {
         sb.append(ParameterConf.TAG_ID + "=" + requiredParam.get(ParameterConf.TAG_ID) + "&");
         sb.append(ParameterConf.UET_VERSION + "=" + requiredParam.get(ParameterConf.UET_VERSION) + "&");
 
-        for (String key : requiredParam.keySet()) {
+        Iterator<Map.Entry<String,String>> it = requiredParam.entrySet().iterator();
+
+        while(it.hasNext())
+        {
+            Map.Entry<String,String> entry = it.next();
+            String key = entry.getKey();
             if(!key.equals(ParameterConf.RANDOM_NUMBER) && !key.equals(ParameterConf.TAG_ID) && !key.equals(ParameterConf.UET_VERSION))
             {
                 sb.append(key + "=");
@@ -108,17 +116,20 @@ public class StringUtil {
             }
         }
 
-        for (String key : optionalParam.keySet()) {
-                sb.append(key + "=");
-                String value = optionalParam.get(key);
-                if(null != value)
-                {
-                    if(value.contains(",")) sb.append(getUrlCoderString(buildArrayStr(value)) + "&");
-                    else  sb.append(getUrlCoderString(value) + "&");
-                }else{
-                    sb.append( "&");
-                }
-
+        it = optionalParam.entrySet().iterator();
+        while(it.hasNext())
+        {
+            Map.Entry<String,String> entry = it.next();
+            String key = entry.getKey();
+            String value = entry.getValue();
+            sb.append(key + "=");
+            if(null != value)
+            {
+                if(value.contains(",")) sb.append(getUrlCoderString(buildArrayStr(value)) + "&");
+                else  sb.append(getUrlCoderString(value) + "&");
+            }else{
+                sb.append( "&");
+            }
         }
 
         // add the random number at the end as a cache buster

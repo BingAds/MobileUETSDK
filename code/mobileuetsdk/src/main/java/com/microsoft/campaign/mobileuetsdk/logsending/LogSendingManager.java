@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Build;
 
 import com.microsoft.campaign.mobileuetsdk.common.httputils.OkHttp;
-import com.microsoft.campaign.mobileuetsdk.common.utils.CacheUtil;
 import com.microsoft.campaign.mobileuetsdk.common.utils.DeviceUtil;
 import com.microsoft.campaign.mobileuetsdk.common.utils.LogCatUtil;
 import com.microsoft.campaign.mobileuetsdk.common.utils.StringUtil;
@@ -14,6 +13,7 @@ import com.microsoft.campaign.mobileuetsdk.conf.ValueConf;
 import com.microsoft.campaign.mobileuetsdk.parameter.ParameterManager;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 
@@ -22,6 +22,10 @@ import java.util.Map;
  * Description:
  */
 public class LogSendingManager {
+    private String sessionId;
+
+    private HashMap<String, String> infoMap;
+
     private Context context;
 
     public Context getContext() {
@@ -36,12 +40,6 @@ public class LogSendingManager {
 
     public LogSendingManager(Context context){
         this.context = context;
-    }
-
-    public void setUserWebId(String webUserId){
-        if (!StringUtil.isEmpty(webUserId)){
-            CacheUtil.KVCache.put(ParameterConf.WEB_USER_ID, webUserId);
-        }
     }
 
     public void sendEvent(Map<String, String> requiredParam, Map<String, String> optionalParam) {
@@ -61,7 +59,7 @@ public class LogSendingManager {
         //turn map to requestParams String
         String requestParams = StringUtil.buildRequestParam(requiredParam, optionalParam);
         final String fullUrl = CommonConf.URL + ValueConf.QUESTION_MARK + requestParams;
-        LogCatUtil.debug(fullUrl);
+        //LogCatUtil.i("[FULL URL]",fullUrl);
         //sent request to G-server
         new Thread(new Runnable() {
             @Override
@@ -70,7 +68,7 @@ public class LogSendingManager {
             }
         }).start();
 
-        LogCatUtil.debug(requestParams);
+        //LogCatUtil.i("[requestParams]", requestParams);
     }
 
     public String checkRequiredParam(Map<String, String> requiredParam)
@@ -91,13 +89,13 @@ public class LogSendingManager {
     public void fillRequiredParam(Map<String, String> requiredParam)
     {
         requiredParam.remove(ParameterConf.MOBILE_USER_ID);
-        requiredParam.put(ParameterConf.MOBILE_USER_ID, CacheUtil.KVCache.get(ParameterConf.ANDROID_ID));
+        requiredParam.put(ParameterConf.MOBILE_USER_ID, infoMap.get(ParameterConf.ANDROID_ID));
 
         requiredParam.remove(ParameterConf.UET_VERSION);
         requiredParam.put(ParameterConf.UET_VERSION, ParameterConf.UET_VERSION_VALUE);
 
         requiredParam.remove(ParameterConf.SESSION_ID);
-        requiredParam.put(ParameterConf.SESSION_ID, CacheUtil.SESSION_ID);
+        requiredParam.put(ParameterConf.SESSION_ID, sessionId);
 
         requiredParam.remove(ParameterConf.EVENT_TYPE);
         requiredParam.put(ParameterConf.EVENT_TYPE, ParameterConf.EVENT_TYPE_CUSTOM);
@@ -110,14 +108,17 @@ public class LogSendingManager {
     public void fillOptionalParam(Map<String, String> optionalParam)
     {
         optionalParam.remove(ParameterConf.DEVICE_UUID);
-        optionalParam.put(ParameterConf.DEVICE_UUID, CacheUtil.KVCache.get(ParameterConf.DEVICE_UUID));
+        optionalParam.put(ParameterConf.DEVICE_UUID, infoMap.get(ParameterConf.DEVICE_UUID));
 
         ParameterManager parameterManager = new ParameterManager(this.context);
         HashMap<String, String> backgroundParamMap = parameterManager.initExtraParam();
-        for(String key:backgroundParamMap.keySet())
+
+        Iterator<Map.Entry<String,String>> it = backgroundParamMap.entrySet().iterator();
+        while(it.hasNext())
         {
-            optionalParam.remove(key);
-            optionalParam.put(key, backgroundParamMap.get(key));
+            Map.Entry<String,String> entry = it.next();
+            optionalParam.remove(entry.getKey());
+            optionalParam.put(entry.getKey(),entry.getValue());
         }
 
         //set other params
@@ -126,26 +127,28 @@ public class LogSendingManager {
         optionalParam.put(ParameterConf.APP_VERSION, DeviceUtil.getVersionName(this.context));
         optionalParam.put(ParameterConf.DEVICE_OS, ValueConf.OS);
         optionalParam.put(ParameterConf.SEND_TIME, System.currentTimeMillis() + ValueConf.STR_DEFAULT_VALUE);
-        optionalParam.put(ParameterConf.NETWORK_OPERATOR_NAME, CacheUtil.KVCache.get(ParameterConf.NETWORK_OPERATOR_NAME));
+        optionalParam.put(ParameterConf.NETWORK_OPERATOR_NAME, infoMap.get(ParameterConf.NETWORK_OPERATOR_NAME));
         //optionalParam.put(ParameterConf.WEB_USER_ID, CacheUtil.KVCache.get(ParameterConf.WEB_USER_ID));
     }
 
     private void firstCallLogic(){
         //create session id and initialize some device's info at first call
-        if ("".equals(CacheUtil.SESSION_ID)){
+        infoMap = new HashMap<>();
+
+        if (sessionId == null){
             String currentTimeForSession = System.currentTimeMillis() + ValueConf.STR_DEFAULT_VALUE;
             String randomStrForSession = (int)(Math.ceil(Math.random() * ValueConf.RANDOM_TIME) +
                     ValueConf.RANDOM_TIME) + ValueConf.STR_DEFAULT_VALUE;
-            CacheUtil.SESSION_ID = StringUtil.md5(currentTimeForSession + randomStrForSession);
+            sessionId = StringUtil.md5(currentTimeForSession + randomStrForSession);
             //initialize some device's info
-            CacheUtil.KVCache.put(ParameterConf.ANDROID_ID, DeviceUtil.getAndroidId(this.context));
+            infoMap.put(ParameterConf.ANDROID_ID, DeviceUtil.getAndroidId(this.context));
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                CacheUtil.KVCache.put(ParameterConf.NETWORK_OPERATOR_NAME, DeviceUtil.getOperatorName(this.context));
-                CacheUtil.KVCache.put(ParameterConf.DEVICE_UUID, DeviceUtil.getUid(this.context));
+                infoMap.put(ParameterConf.NETWORK_OPERATOR_NAME, DeviceUtil.getOperatorName(this.context));
+                infoMap.put(ParameterConf.DEVICE_UUID, DeviceUtil.getUid(this.context));
             } else {
-                CacheUtil.KVCache.put(ParameterConf.NETWORK_OPERATOR_NAME, ValueConf.STR_DEFAULT_VALUE);
-                CacheUtil.KVCache.put(ParameterConf.DEVICE_UUID, ValueConf.STR_DEFAULT_VALUE);
+                infoMap.put(ParameterConf.NETWORK_OPERATOR_NAME, ValueConf.STR_DEFAULT_VALUE);
+                infoMap.put(ParameterConf.DEVICE_UUID, ValueConf.STR_DEFAULT_VALUE);
             }
         }
     }
